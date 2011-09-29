@@ -1,0 +1,28 @@
+da:
+    eq_has_synonym: eq_has_synonym
+    xpos_near_synonym: nærsynonymt (ordklasse)
+    role_patient: udfører (patiens)
+    concerns: vedrører
+    used_for: bruges til
+    involved_agent: inddrager (agens)
+    made_by: fremstilles ved
+    used_for_object: bruges til (objekt)
+    involved_patient: inddrager (patiens)
+    near_synonym: næsten synonymt
+    role_agent: udfører (agens)
+    near_antonym: nærantonym
+    involved_instrument: anvendt redskab
+    has_holonym: del af
+    has_hyperonym: har overbegreb
+    eq_has_hyponym: eq_has_hyponym
+    has_mero_part: har del
+    has_holo_part: del af
+    eq_has_hyperonym: eq_has_hyperonym
+    has_holo_location: placeret i
+    has_mero_madeof: lavet af
+    has_holo_member: indgår i
+    has_hyponym: har underbegreb
+    has_mero_member: sammensat af
+    has_holo_madeof: indgår i
+    has_mero_location: indeholder
+    domain: fag

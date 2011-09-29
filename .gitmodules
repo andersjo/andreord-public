@@ -1,0 +1,6 @@
+[submodule "vendor/plugins/active_schema"]
+	path = vendor/plugins/active_schema
+	url = git@github.com:crishoj/active_schema.git
+[submodule "vendor/plugins/redhillonrails_core"]
+	path = vendor/plugins/redhillonrails_core
+	url = git://github.com/harukizaemon/redhillonrails_core.git

@@ -1,0 +1,177 @@
+    <style type="text/css">
+
+#relGraph {
+  width: 800px;
+  height: 650px;
+}
+
+    </style>
+<div id="relGraph" style="display: none">
+    <script type="text/javascript+protovis">
+
+function dist(x1,y1,x2,y2) {
+  return Math.sqrt(Math.pow(x1-x2, 2) + Math.pow(y1-y2, 2))
+}
+
+function quadrant(x,y) { 
+  if (x > 0 && y < 0) return 1
+  if (x < 0 && y < 0) return 2
+  if (x < 0 && y > 0) return 3
+  if (x > 0 && y > 0) return 4
+}
+
+function atTopOrButtom(x) {
+  return x > -50 && x < 50
+}
+
+flare = <%= @related_syn_sets.to_json.html_safe %>
+<%= outer_node_count = @related_syn_sets.values.map(&:values).flatten.size %>
+var outerNodeCount = <%= outer_node_count %>
+var outerNodeSlice = 2*Math.PI/outerNodeCount
+
+var colors = pv.Colors.category20()
+
+var vis = new pv.Panel()
+    .top(30)
+    .width(750)
+    .height(600)
+
+
+var dom= pv.dom(flare)
+dom.leaf(function(n) 'gloss' in n)
+var root = dom.root("<%= @sense.word.lemma %>")
+var childNodesBefore = 0
+
+var slantedText = <%= outer_node_count > 35 ? "true" : "false" %>
+
+var radius0 = 60
+var radius1 = 140
+
+root.visitBefore(function(n) {
+  if (!n.parentNode) {
+    n.x = 0
+    n.y = 0
+    return
+  }
+  if (n.firstChild) {
+    n.firstChildAngle = (childNodesBefore / outerNodeCount) * 2*Math.PI
+    n.lastChildAngle  = ((n.childNodes.size() + childNodesBefore) / outerNodeCount) * 2*Math.PI
+    if (n.childNodes.size() == 1)
+      n.childMidAngle = n.firstChildAngle
+    else
+      n.childMidAngle = n.firstChildAngle + (outerNodeSlice*n.childNodes.size()) / 2
+    n.x = Math.cos(n.childMidAngle)*radius0
+    n.y = Math.sin(n.childMidAngle)*radius0
+    childNodesBefore += n.childNodes.size()
+    n.branch = n.nodeName
+  } else {
+    for (var i = 0; i < n.parentNode.childNodes.size(); i++) {
+      if (n.parentNode.childNodes[i] == n) { // we found ourselves
+        n.childSortIndex = i
+        var angleSpan = n.parentNode.lastChildAngle - n.parentNode.firstChildAngle
+        var myAngle = n.parentNode.firstChildAngle + (i/n.parentNode.childNodes.size())*angleSpan;
+
+        n.x = Math.cos(myAngle)*(radius0+radius1)
+        n.y = Math.sin(myAngle)*(radius0+radius1)
+        if (slantedText)
+          n.textAngle = n.x > 0 ? Math.PI-myAngle+Math.PI : Math.PI-myAngle
+        n.branch = n.parentNode.nodeName
+      }
+    }
+  }
+})
+
+var tree = vis.add(pv.Panel)
+    .bottom(300)
+    .left(300)
+
+tree
+  .add(pv.Dot)
+    .data(root.nodes())
+    .bottom(function(n) n.y)
+    .left(function(n) n.x)
+    .size(0)
+    .title(function(n) n.nodeName + ": " + n.x + "," + n.y)
+    .anchor(function(n) {
+      if (slantedText) {
+        return n.x > 0 ? "right" : "left"
+      } else {
+        if (atTopOrButtom(n.x)) {
+          return n.y > 0 ? "top" : "bottom"
+        } else { 
+          return n.x > 0 ? "right" : "left"
+        }
+      }
+    })
+  .add(pv.Label)
+    .font("11px 'Arvo'")
+    .visible(function(n) !n.firstChild)
+    .text(function(n) n.nodeName)
+    .title(function(n) n.nodeValue['gloss'])
+    .events("all")
+    .cursor("hand")
+    .event("click", function(n) {
+      document.location = n.nodeValue['link']
+    })
+    .textAngle(function(n) n.textAngle)
+    .textMargin(function(n) {
+      if (atTopOrButtom(n.x) && !slantedText) return n.index % 2 == 0 ? 15 : 5
+      return 5
+    })
+
+    
+
+root.nodes().filter(function(n) n.parentNode).each(function(n) { 
+  tree
+    .add(pv.Line)
+      .data([[n.x, n.y], [n.parentNode.x, n.parentNode.y]])
+      .left(function(a) a[0])
+      .bottom(function(a) a[1])
+      .strokeStyle(colors(n.branch).color)
+      .lineWidth(2)
+      .title(n.branch)
+})
+
+tree.add(pv.Label)
+  .font((root.nodeName.length > 10 ? 24 : 36) + "px 'Arvo', sans-serif")
+  .text(root.nodeName)
+  .textAlign("center")
+  .textShadow("0.1em 0.1em 0.1em rgba(0,0,0,.15)")
+  .textBaseline("middle")
+  .bottom(0)
+  .left(0)
+
+legend = vis.add(pv.Panel)
+  .top(75)
+  .left(600)
+  .height(200)
+  .width(250)
+
+legend.add(pv.Label)
+  .font("11px 'Arvo'")
+  .text("RELATIONER")
+  .top(20)
+  .left(5)
+
+legend.add(pv.Dot)
+  .data(root.nodes().filter(function(n) n.firstChild && n.parentNode))
+  .shape("square")
+  .top(function() 40 + this.index * 20)
+  .left(15)
+  .size(15)
+  .strokeStyle(null)
+  .fillStyle(function(n) colors(n.branch).color)
+  .anchor("right")
+  .add(pv.Label)
+    .text(function(n) n.nodeName)
+    .font("13px 'Arvo', sans-serif")
+
+  vis.render()
+
+    </script>
+  <div class="graphSelectBox">
+    Vis <strong>relationer</strong> eller <a href="#begreber">begrebshierarki</a>
+  </div>
+
+  </div>
+

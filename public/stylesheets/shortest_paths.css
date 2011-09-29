@@ -1,0 +1,38 @@
+/* @override 
+	http://localhost:3000/stylesheets/shortest_paths.css?1244793019
+	http://localhost:3000/stylesheets/shortest_paths.css?1244793174
+*/
+
+#splitView {
+	width: 750px;
+	margin: 2em auto;
+
+}
+
+.sensesBox {
+	width: 350px;
+	float: left;
+}
+
+.sensesBox h3 {
+	margin-top: 0;
+}
+
+.sensesBox ol {
+	list-style-position: inside;
+	padding-left: 0.2em;
+}
+
+
+#srcSense {
+	border-right: 1px dotted #919F20;
+}
+
+#dstSense {
+	padding-left: 1em;
+	
+}
+
+.sensesBox:first-child {
+	border-right: 1px solid red;
+}

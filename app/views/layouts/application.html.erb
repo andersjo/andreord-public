@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="google-site-verification" content="mHzS4U61Xdcd_92xVGJY_vQ7Ws370a0PvljDfAvfULU" />
+        <title><%= h(@title||"Andre ord") %></title>
+        <link  href="//fonts.googleapis.com/css?family=Arvo:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css" >
+        <%= stylesheet_link_tag(:all, :cache => true) %>
+        <%= javascript_include_tag(:all, :cache => true) %>
+        <%= csrf_meta_tag %>
+        <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/combo?2.8.0r4/build/autocomplete/assets/skins/sam/autocomplete.css"/>
+    </head>
+  <body class="yui-skin-sam">
+    <div id="scene">
+      <div id="header">
+          <div id="query">
+                <% form_tag('',
+                    :method => :get,
+                    :id => :search_form) do %>
+                <div id="querySuggestions">
+                      <input id="queryInput" type="text"/>
+                      <div id="querySuggestionsContainer"></div>
+                  </div>
+                <%= submit_tag "Slå op" %>
+                <% end %>
+            </div>
+            <div id="logo">
+              <a href="/">Andre ord</a>
+            </div>
+            <br style="height:150px; clear:both"/>
+          </div>
+          <script>
+              $('search_form').observe('submit', function(e) {
+                  e.stop()
+                  gotoWord($F('queryInput'))
+              })
+          </script>
+          <div id="main">
+              <%= yield %>
+          </div>
+          <div id="footer">
+              <%= link_to 'andreord.dk', '/' %> er faldet ud af ærmet på 
+              <%= mail_to 'anders@johannsen.com', 'Anders Johannsen', :encode => 'javascript' %><br/>
+              Siden præsenterer data fra <%= link_to 'DanNet', 'http://wordnet.dk' %>
+          </div>
+          <%= render :partial => 'layouts/query_autocompleter' %>
+    </div>
+    <%= render :partial => 'layouts/google_analytics' %>
+    </body>
+</html>

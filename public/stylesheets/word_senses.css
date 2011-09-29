@@ -1,0 +1,70 @@
+/* @override 
+	http://localhost:3000/stylesheets/word_senses.css?1244728922
+	http://localhost:3000/stylesheets/word_senses.css?1244730248
+	http://localhost:3000/stylesheets/word_senses.css?1244730681
+	http://localhost:3000/stylesheets/word_senses.css?1244745427
+	http://localhost:3000/stylesheets/word_senses.css?1244746161
+	http://localhost:3000/stylesheets/word_senses.css?1244746862
+	http://localhost:3000/stylesheets/word_senses.css?1244749646
+	http://localhost:3000/stylesheets/word_senses.css?1244749829
+	http://localhost:3000/stylesheets/word_senses.css?1244751347
+	http://localhost:3000/stylesheets/word_senses.css?1246049400
+	http://localhost:3000/stylesheets/word_senses.css?1246050473
+	http://localhost:3000/stylesheets/word_senses.css?1246050599
+*/
+
+#gloss {
+	margin-left: 0em;
+	font-size: 18px;
+}
+
+.analysisBox {
+
+	margin-top: 1em;
+	padding: 1em 1em 0em 0em;
+}
+
+.analysisBox > h3 {
+	margin-top: 0;
+}
+
+.graph {
+	text-align: center;
+}
+
+.graph img {
+	max-width: 775px;
+}
+
+.capped ul {
+	max-height: 400px;
+	overflow-y: auto;
+	list-style-type: square;
+	list-style-position: inside;
+	padding-left: 1em;
+}
+
+.apropos span {
+	float: left;
+	line-height: 2em;
+}
+
+.apropos .posName {
+	width: 20%;
+	font-variant: small-caps;
+	clear: left;
+
+}
+.apropos .examples {
+	clear: right;
+	width: 80%;
+}
+
+.examples ul {
+	margin-left: 0;
+	padding-left:  0;
+}
+
+.apropos {
+	clear: both;
+}

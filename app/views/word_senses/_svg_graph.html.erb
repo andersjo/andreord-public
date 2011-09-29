@@ -1,0 +1,17 @@
+<%= render :partial => 'rel_graph' %>
+<%= render :partial => 'hypo_graph' %>
+
+<script language="javascript">
+  if (/#begreber/.match(location.hash)) {
+    $('hypoGraph').toggle()
+  } else {
+    $('relGraph').toggle()
+  }
+
+  $$('.graphSelectBox a').each(function(a) {
+    a.observe('click', function(e) {
+      $("relGraph").toggle()
+      $("hypoGraph").toggle()
+    })
+  })
+</script>

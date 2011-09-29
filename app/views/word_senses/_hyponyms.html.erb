@@ -1,0 +1,15 @@
+<% if @hyponyms.length > 5 %>
+    <div class="analysisBox hyponyms">
+        <h3>Underbegreber</h3>
+        <div class="list capped">
+            <ul>
+              <% for hyponym in @hyponyms %>
+                <li>
+                    <%= raw(link_word_sense_lemmas(hyponym.word_senses).to_sentence) %>:
+                    <em><%= hyponym.gloss %></em>
+                </li>
+              <% end %>
+            </ul>
+        </div>
+    </div>
+<% end %>

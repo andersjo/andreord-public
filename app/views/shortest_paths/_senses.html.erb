@@ -1,0 +1,9 @@
+<% if senses.size == 1 %>
+    <%= render :partial => 'unambigious_sense', :object => senses.first  %>
+<% else %>
+    <ol>
+        <%= render :partial => 'sense',
+                :collection => senses,
+                :locals => {:extremity => extremity } %>
+    </ol>
+<% end %>

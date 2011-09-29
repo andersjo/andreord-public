@@ -1,0 +1,83 @@
+    <style type="text/css">
+
+#hypoGraph {
+  width: 800px;
+  height: 730px;
+  margin-top: 1em;
+}
+
+#hypoGraph .center {
+  width: 700px;
+  margin: auto;
+}
+
+
+
+    </style>
+<div id="hypoGraph" style="display: none">
+  <div class="center">
+    <script type="text/javascript+protovis">
+
+<% htree = @syn_set.hyponyms_below.filtered_by_level([0, 35, *1.upto(5).map {|i| i*100 }], 6) %>
+
+var tree= <%= htree.id_tree.to_json.html_safe %>
+var data = <%= hyponym_nodes_to_json(htree.syn_sets) %>
+var root = pv.dom(tree).root("<%= @sense.word.lemma %>")
+var hyponymCount = <%= @syn_set.hyponym_count %>
+var catColors = pv.Colors.category19()
+
+root.nodes().each(function(n) {
+  if (n.nodeName in data) {
+    n.nodeValue = data[n.nodeName]
+    n.nodeName  = n.nodeValue['pretty_label']
+  } else {
+    n.nodeValue = {'hyponym_count': n.nodeValue}
+  }
+})
+
+var vis = new pv.Panel()
+    .width(700)
+    .height(700)
+    .bottom(0);
+
+  var partition = vis.add(pv.Layout.Partition.Fill)
+    .nodes(root.nodes())
+    .size(function(d) {
+      return d.nodeValue['hyponym_count'];
+    })
+    .order("descending")
+    .orient("radial");
+
+partition.node.add(pv.Wedge)
+    .fillStyle(function(n) {
+      if (n.nodeName == "rest") {
+        return catColors(n.parentNode && n.parentNode.nodeName).alpha(0.4)
+      } else {
+        return catColors(n.parentNode && n.parentNode.nodeName)
+      }
+    })
+    .strokeStyle("#fff")
+    .lineWidth(.5)
+    .cursor("hand")
+    .event("click", function(n) {
+      if (n.nodeName != 'rest')
+        document.location = n.nodeValue['link']
+    })
+    .title(function(n) {
+      var ofTotal = parseFloat(n.nodeValue['hyponym_count']) / hyponymCount
+      return (ofTotal*100).toFixed(1) + " % (" + n.nodeValue['hyponym_count'] + " / " + hyponymCount + " )"
+    })
+
+
+partition.label.add(pv.Label)
+    .font(function (d) d.parentNode ? "13px 'Arvo'" : "bold 16px 'Arvo'")
+    .visible(function(d) (d.angle * d.outerRadius >= 6) && d.nodeName != 'rest')
+
+vis.render()
+
+    </script>
+  </div>
+  <div class="graphSelectBox">
+    Vis <a href="#relationer">relationer</a> eller <strong>begrebshierarki</strong>
+  </div>
+</div>

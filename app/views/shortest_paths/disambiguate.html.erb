@@ -1,0 +1,15 @@
+<h2>Korteste vej mellem begreber</h2>
+<h3>Flertydigt begreb</h3>
+<p>Vi har registreret flere betydninger for
+<% if [@src_senses,@dst_senses].all? {|s| s.size > 1 } %>
+    begreberne <em><%= params[:src] %></em> og <em><%= params[:dst] %></em></p>
+<% elsif @src_senses.size > 1 %>
+    begrebet <em><%= params[:src] %></em>
+<% else %>
+    begrebet <em><%= params[:dst] %></em>
+<% end %>
+<%= render :partial => 'split_view',
+    :locals => {    :src_senses => @src_senses,
+                    :dst_senses => @dst_senses
+    }
+  %>

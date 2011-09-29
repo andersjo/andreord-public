@@ -1,0 +1,35 @@
+<div style="margin-top: 1em; clear: both"></div>
+<%= image_tag 'tree_bw.gif', :class => 'treeImage' %>
+<p class="highlight">
+  <span class="siteName">Andre ord</span> viser hvordan begreberne hænger sammen.
+</p>
+<p>
+  Her kan man se at en <%= link_to 'dværgpil', find_heading_path("dværgpil") %>
+  <span class="relationType">er en slags</span> <%= link_to 'busk', find_heading_path('busk') %>,
+  at et <%= link_to 'lysthus', find_heading_path('lysthus (bygning)') %> <span class="relationType">findes i</span> en <%= link_to 'have', find_heading_path('have (område)') %>,
+  og at <%= link_to 'fiberdrys', find_heading_path('fiberdrys') %> <span class="relationType">bruges til</span> at <%= link_to 'spise', find_heading_path('spise (indtage)') %>.
+</p>
+<p>
+  Til forskel fra en almindelig ordbog er det ikke definitionen af ordet der står i centrum.
+  I stedet handler det om hvad ordet er i forhold til andre ord.
+</p>
+<p>I alt er der registreret <%= number_with_delimiter(DanNet::SynSet.count) %> begreber
+som holdes på plads af <%= number_with_delimiter(DanNet::Relation.count) %> indbyrdes forbindelser.</p>
+
+<h3>Om ordnetværk</h3>
+<p>
+  Begrebsnetværket der udstilles på denne side, er baseret på data fra <%= link_to 'DanNet',  'http://www.wordnet.dk' %> version 2.0.
+  Projektet er et samarbejde mellem <%= link_to 'Center for Sprogteknologi', 'http://cst.ku.dk' %> på Københavns Universitet
+  og <%= link_to 'Det Danske Sprog- og Litteraturselskab', 'http://dsl.dk/' %>.
+</p>
+<p>
+  DanNets indflydelsesrige forbillede er det engelsksprogede <%= link_to 'WordNet', 'http://wordnet.princeton.edu/'%>
+  der siden midten af 1980'erne er blevet udviklet ved Princeton University.
+</p>
+<p>
+  Ordnetværk gør mest nytte som hjælpeværktøj for software 
+  der forsøger at komme på det rene med hvad tekster betyder. 
+  Alligevel er ambitionen med <span class="siteName">andre ord</span>
+  at invitere mennesker til at se lidt nærmere på
+  hvordan verden begrebsligt hænger sammen.
+</p>

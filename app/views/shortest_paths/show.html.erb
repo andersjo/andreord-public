@@ -1,0 +1,18 @@
+<h2>Korteste vej mellem begreber</h2>
+<%= render :partial => 'split_view',
+    :locals => {    :src_senses => [@src],
+                    :dst_senses => [@dst]
+    }
+%>
+<% if @path %>
+    <h3>Sti</h3>
+    <p>Der er <%= @relations.count %> trin mellem begreberne</p>
+    <ol id="path">
+    <% for step in @relations %>
+        <li><%=  step.inspect%><br/>
+        </li>
+    <% end %>
+    </ol>
+<% else %>
+    <em>Desværre. Begreberne hænger ikke sammen</em>
+<% end %>

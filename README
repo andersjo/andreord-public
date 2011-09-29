@@ -1,0 +1,7 @@
+== Steps to move the development database to production
+
+At the development machine: 
+% pg_dump -F c -O andreord_development > andreord.sql
+
+At the server
+% pg_restore -U postgres -d andreord -O -h 127.0.0.1 -c andreord.sql

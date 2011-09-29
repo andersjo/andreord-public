@@ -1,0 +1,15 @@
+<div id="splitView">
+    <div id="srcSense" class="sensesBox">
+        <h3>Fra</h3>
+        <%= render :partial => 'senses',
+          :locals => {:extremity => :src },
+          :object => src_senses %>
+    </div>
+    <div id="dstSense" class="sensesBox">
+        <h3>Til</h3>
+        <%= render :partial => 'senses',
+          :locals => {:extremity => :dst },
+          :object => dst_senses %>
+    </div>
+    <br style="clear:both">
+</div>

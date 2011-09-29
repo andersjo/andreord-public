@@ -1,0 +1,8 @@
+<li>
+    <big>
+        <%= link_to(sense.heading,
+            url_for(:overwrite_params => {extremity => sense.heading})
+        )%>
+    </big>
+    <p><%= sense.syn_set.gloss %></p>
+</li>

@@ -1,0 +1,51 @@
+<div id="pos"><%= t(@sense.word.pos_tag.name) %></div>
+<h2><%= @sense.heading %></h2>
+<div id="gloss">
+    <%= @syn_set.gloss %>
+</div>
+<%= render :partial => 'graphs' %>
+
+<% unless @synonyms.empty? %>
+    <div class="analysisBox">
+        <h3>Synonymer</h3>
+        <%= raw(@synonyms.collect {|ws| link_to ws.word.lemma, ord_path(ws)}.to_sentence) %>
+    </div>
+<% end %>
+<% unless @syn_set.examples.empty? %>
+    <div class="analysisBox examples">
+        <h3>I en sætning</h3>
+        <div class="list capped">
+          <ul>
+            <% for example in @syn_set.examples %>
+              <li><%= example %></li>
+            <% end %>
+          </ul>
+        </div>
+    </div>
+<% end %>
+
+   <div class="analysisBox">
+        <h3>Placering</h3>
+        <% if @paths_to_top.size > 1 %>
+          <% min_path = @paths_to_top.first %>
+          <% max_path = @paths_to_top.last %>
+          <%= @sense.word.lemma %> har
+          mindst <%= pluralize(min_path.size, "overbegreb", "overbegreber") %>
+          <%= raw("(via #{format_path_to_top(min_path)})") %> og maksimalt
+          <%= max_path.size %> <%= raw("(#{format_path_to_top(max_path)})") %>
+        <% elsif @paths_to_top.size == 1 %>
+          <% path_to_top = @paths_to_top.first %>
+          <%= @sense.word.lemma %> har 
+            <%= pluralize(path_to_top.size, "overbegreb", "overbegreber") %>
+            <%= raw("(#{format_path_to_top(path_to_top)})") %>
+        <% end %>
+    </div>
+
+<%= render :partial => 'hyponyms' %>
+<% unless @features.empty? %>
+    <div class="analysisBox features">
+        <h3>Egenskaber</h3>
+        <%= @features.map(&:feature_type).map{|ft| t(ft.name)}.to_sentence %>
+    </div>
+<% end %>
+

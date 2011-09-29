@@ -1,0 +1,12 @@
+<% lemma   = Corpora::Lemma.find_by_chars(@sense.word.lemma) %>
+<% related = lemma && lemma.correlated([Corpora::PosTag.find_by_name(pos_tag)]) || [] %>
+<% if not related.empty? %>
+  <p>
+    <span class="posName">
+      <%= pos_name %>
+    </span>
+    <span class="examples">
+      <%= related.map(&:chars).to_sentence %>
+    </span>
+  </p>
+<% end %>

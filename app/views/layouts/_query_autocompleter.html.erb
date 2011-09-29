@@ -1,0 +1,65 @@
+<!--Include YUI Loader: -->
+<script type="text/javascript" src="http://yui.yahooapis.com/2.8.0r4/build/yuiloader/yuiloader-min.js"></script>
+
+<!--Use YUI Loader to bring in your other dependencies: -->
+<script type="text/javascript">
+function setupAutocomplete() {
+  YAHOO.example.BasicRemote = function() {
+    // Use an XHRDataSource
+    var oDS = new YAHOO.util.XHRDataSource("<%= word_suggestions_path %>");
+    // Set the responseType
+    oDS.responseType = YAHOO.util.XHRDataSource.TYPE_TEXT;
+    // Define the schema of the delimited results
+    oDS.responseSchema = {
+        recordDelim: "\n",
+        fieldDelim: "\t"
+    };
+    // Enable caching
+    oDS.maxCacheEntries = 5;
+
+    // Instantiate the AutoComplete
+    var oAC = new YAHOO.widget.AutoComplete("queryInput", "querySuggestionsContainer", oDS);
+    oAC.itemSelectEvent.subscribe(function(sType, aArgs) {
+      var myAC = aArgs[0]; // reference back to the AC instance
+      var elLI = aArgs[1]; // reference to the selected LI element
+      var oData = aArgs[2]; // object literal of selected item's result data
+      gotoWord(oData)
+    })
+    
+     oAC.formatResult = function(oResultData, sQuery, sResultMatch) {
+        var matchIdx = sResultMatch.indexOf(sQuery)
+        var before = sResultMatch.substr(0, matchIdx)
+        var after  = sResultMatch.substr(matchIdx + sQuery.length)
+        return  "<div>" +
+                "<span>" + before + "</span>" +
+                "<span style='font-weight: bold'>" + sQuery + "</span>" +
+                "<span>" + after + "</span>" +
+                "</div>"
+    };
+
+
+return {
+        oDS: oDS,
+        oAC: oAC
+    };
+  }();
+}
+
+// Instantiate and configure YUI Loader:
+(function() {
+	var loader = new YAHOO.util.YUILoader({
+		base: "",
+		require: ["animation","autocomplete","connection","datasource"],
+		loadOptional: false,
+		combine: true,
+		filter: "MIN",
+		allowRollup: true,
+		onSuccess: function() {
+                  setupAutocomplete()
+		}
+	});
+
+// Load the files using the insert() method.
+loader.insert();
+})();
+</script>

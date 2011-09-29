@@ -1,0 +1,5 @@
+<% if request.env['HTTP_USER_AGENT'] =~ /msie/i %>
+  <%= render :partial => 'flash_graph' %>
+<% else %>
+  <%= render :partial => 'svg_graph' %>
+<% end %>
