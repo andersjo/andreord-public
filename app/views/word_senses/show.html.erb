@@ -41,6 +41,23 @@
         <% end %>
     </div>
 
+<% unless @alignments.empty? %>
+    <div class="analysisBox alignment">
+        <h3>Alignering</h3>
+        Det engelske <a href="http://wordnet.princeton.edu/">Wordnet</a> har begreber der svarer til det danske:</p>
+        <ul class="list">
+           <% for alignment in @alignments %>
+            <li>
+                <span style="font-size: 1.2em; padding-right: 0.3em" alt='<%= alignment.relation_type_name %>'>
+                    <%= t(alignment.relation_type_name, :scope => :relation_type_symbols) %>
+                </span>
+                <%= alignment.synonyms.to_sentence %>: <em><%= alignment.definition %></em></li>
+           <% end %>
+        </ul>
+    </div>
+<% end %>
+
+
 <%= render :partial => 'hyponyms' %>
 <% unless @features.empty? %>
     <div class="analysisBox features">

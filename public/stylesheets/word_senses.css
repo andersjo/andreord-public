@@ -11,6 +11,7 @@
 	http://localhost:3000/stylesheets/word_senses.css?1246049400
 	http://localhost:3000/stylesheets/word_senses.css?1246050473
 	http://localhost:3000/stylesheets/word_senses.css?1246050599
+	http://localhost:3000/stylesheets/word_senses.css?1318543549
 */
 
 #gloss {
@@ -36,12 +37,19 @@
 	max-width: 775px;
 }
 
+.list ul, ul.list {
+    list-style-type: square;
+    list-style-position: inside;
+    padding-left: 1em;
+}
+
+.alignment li {
+    list-style-type: none;
+}
+
 .capped ul {
 	max-height: 400px;
 	overflow-y: auto;
-	list-style-type: square;
-	list-style-position: inside;
-	padding-left: 1em;
 }
 
 .apropos span {

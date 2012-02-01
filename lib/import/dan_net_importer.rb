@@ -7,7 +7,7 @@ module Import
     #include Hirb::Console
     DATA_DIR = "#{RAILS_ROOT}/lib/import/dan_net_data"
     DATA_FILE = "#{DATA_DIR}/dannet.zip"
-    DATA_URL = "http://wordnet.dk/dannet/DanNet-1.4_csv.zip"
+    DATA_URL = "http://wordnet.dk/dannet/dannet/DanNet-2.1_csv.zip"
     UNITS = %w{synsets dummies synset_attributes words wordsenses relations}
 
     REVERSE_RELATIONS = { 'holo' => 'mero', 'hypero' => 'hypo',
@@ -82,6 +82,7 @@ SQL
       #         or 'Vehicle+Object+Artifact'.
       rows(%w{id label gloss ontological_type}) do |row|
         next unless local_synset_id?(row['id'])
+
         syn_set = DanNet::SynSet.new(:label => row['label'])
         if row['gloss'] =~ /^(.*)(\s*\(Brug:\s"(.*))"\)/
           syn_set.gloss = $1
@@ -122,6 +123,7 @@ SQL
       #  form:  The lexical form of the entry
       #  pos:   The part of speech of the entry
       rows(%w{id form pos}) do |row|
+        next unless local_word_id? row['id']
         word = DanNet::Word.new(
           :lemma => row['form'],
           :pos_tag => pos_tag_by_name(row['pos']))
@@ -145,6 +147,7 @@ SQL
         # will be created. This is caused by the column ddo_id which we will
         # need to handle seperately
         next unless local_synset_id?(row['synset_id'])
+        next unless local_word_id? row['word_id']
         key_columns = {
           :word_id     => convert_hyphened_id(row['word_id']),
           :syn_set_id  => convert_hyphened_id(row['synset_id']) }
@@ -175,14 +178,11 @@ SQL
       #             particular synset, a text comment will state from which
       #             synset the relation stems.
       rows(%w{synset_id name name2 value taxonomic inheritance_comment}) do |row|
-        next unless local_synset_id?(row['synset_id'])
+        next unless local_synset_id? row['synset_id']
+        next unless local_synset_id? row['value']
+
         rel = DanNet::Relation.new
-        if row['value'] =~ /^ENG/
-          rel.target_word_net_id = row['value']
-        else
-          next unless local_synset_id?(row['value'])
-          rel.target_syn_set_id = convert_hyphened_id(row['value'])
-        end
+        rel.target_syn_set_id = convert_hyphened_id(row['value'])
         if row['taxonomic'].present?
           rel.taxonomic = !!(row['taxonomic'] == 'taxonomic')
         end
@@ -298,7 +298,8 @@ SQL
     def file_content
       begin
         file = File.open("#{DATA_DIR}/#{@unit}.csv", "r")
-        Iconv.conv("UTF-8", "ISO-8859-1", file.read)
+        file.read
+        #Iconv.conv("UTF-8", "ISO-8859-1", file.read)
       ensure
         file.close
       end
@@ -356,6 +357,10 @@ SQL
 
     def local_synset_id?(id)
        id =~ /^[0-9]+$/
+    end
+
+    def local_word_id?(id)
+      id =~ /^[0-9]+$/
     end
 
     def self.import

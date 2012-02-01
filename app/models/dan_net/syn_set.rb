@@ -3,8 +3,10 @@ module DanNet
   class SynSet < ActiveRecord::Base
     has_many :words, :through => :word_senses
     has_many :relations, {:class_name=>"DanNet::Relation", :foreign_key=>"syn_set_id" }
+    has_many :alignments
     has_many :relation_types, :through => :relations
     has_many :word_senses, {:class_name=>"DanNet::WordSense"} do
+
       def preferred
         detect do |ws|
           preferred_word = I18n.t(ws.syn_set_id , :scope => 'pretty_labels', :default => 'XXX')

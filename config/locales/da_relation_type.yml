@@ -26,3 +26,7 @@ da:
     has_holo_madeof: indgår i
     has_mero_location: indeholder
     domain: fag
+    relation_type_symbols:
+      eq_has_synonym: →
+      eq_has_hyperonym: ↑
+      eq_has_hyponym: ↓
